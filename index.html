@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Java in Browser</title>
+    <!-- CheerpJ 3.0 런타임 로드 -->
+    <script src="https://cjrtnc.leaningtech.com/3.0/cj3loader.js"></script>
+</head>
+<body>
+    <div id="output"></div>
+
+    <script>
+        // CheerpJ 3.0 초기화
+        (async function() {
+            try {
+                // CheerpJ 런타임 초기화
+                await cjInit();
+
+                // Java 클래스를 실행하는 함수
+                const javaCode = `
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        System.out.println("Hello from Java in Browser!");
+                    }
+                }`;
+
+                // Java 코드를 실행할 컨테이너 생성
+                const container = await cjCall("java.io.ByteArrayInputStream", javaCode.getBytes());
+                
+                // 출력을 캡처하여 화면에 표시
+                const output = document.getElementById('output');
+                output.innerHTML = "Java 코드가 실행되었습니다.";
+                
+            } catch (error) {
+                console.error("Java 실행 중 오류 발생:", error);
+                document.getElementById('output').innerHTML = "오류 발생: " + error.message;
+            }
+        })();
+    </script>
+</body>
+</html>
